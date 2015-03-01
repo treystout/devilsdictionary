@@ -1,4 +1,6 @@
+import base64
 import logging
+import requests
 
 from flask import Blueprint, render_template as T, session, redirect, url_for, \
     request as R, flash, g, jsonify, abort, current_app
@@ -23,11 +25,14 @@ def definition(word):
   w = word_dict.get(word)
   if not w:
     abort(404)
-  return T("definition.j2", word=word, part=w['part'],
-      definition=w['definition'])
 
-@mod.route('/render/<word>/')
-def render(word):
+  handwritings = gracious_api.get_handwritings()
+
+  return T("definition.j2", word=word, part=w['part'],
+      definition=w['definition'], handwritings=handwritings)
+
+@mod.route('/render/<word>/<hw_id>/')
+def render(word, hw_id):
   w = word_dict.get(word)
   if not w:
     abort(404)
@@ -35,7 +40,21 @@ def render(word):
   to_write = """%s (%s)
   %s
   """ % (word, w['part'], w['definition'])
+  log.debug("will render %s in HW %s", word, hw_id)
 
-  gracious_api.render(to_write)
+  img = gracious_api.render(hw_id, to_write, 5, 3)
+  url = img['_links']['screen_file']['href']
+  log.debug("image created at %s", url)
+
+  import time
+  time.sleep(8)
+
+  r = requests.get(url, headers={'Authorization': 'Bearer %s' % \
+      gracious_api.HACK_token()}, stream=True)
+
+  if r.status_code == 200:
+    r.raw.decode_content = True
+    rendered = base64.b64encode(r.raw.read())
+
   return T("definition.j2", word=word, part=w['part'],
-      definition=w['definition'])
+      definition=w['definition'], rendered=rendered)
