@@ -1,11 +1,12 @@
 <h1>Welcome to the Devil's Dictionary</h1>
-<p>You can find out more about it here...</p>
+<p>You can find out more about it on <a href="http://en.wikipedia.org/wiki/The_Devil's_Dictionary">wikipedia.</a></p>
+<p>To see the definitions (and render them in a handwriting, just click any word and then select a language on the following page</p>
+<hr>
 <dl>
 {% for item in words %}
   <dt>
     <a href="{{url_for('.definition', word=item[0])}}">{{item.0}}</a>
     <em>{{item.1}}</em>
   </dt>
-  <dd>{{item.2}}</dd>
 {% endfor %}
 </dl>
