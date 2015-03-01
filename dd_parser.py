@@ -4,7 +4,6 @@ text into a python dictionary
 """
 import re
 
-#RE_def = re.compile(r'^([A-Z]+), (.{1,3})\.\s+(.+?)', re.S)
 RE_def = re.compile(r'^([A-Z]+?), (.{1,3})\.', re.M | re.S)
 
 d = {}
@@ -30,8 +29,9 @@ with open("devilsdictionary.txt") as f:
 #for k, v in d.items():
 #  print k, "->", v['definition']
 
+#for w in words:
+#  print "%s\t(%s.)" % (w['word'], w['part'])
+#  print "\t|||%s|||\n" % w['definition']
+
 for w in words:
-  print "%s\t(%s.)" % (w['word'], w['part'])
-  print "\t|||%s|||\n" % w['definition']
-
-
+  print "['%s', '%s', '''%s''']," % (w['word'], w['part'], w['definition'])

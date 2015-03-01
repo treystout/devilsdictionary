@@ -1,0 +1,7 @@
+<h1>{{word}} <small>{{part}}</h1>
+<p>{{definition}}</p>
+<a href="{{url_for('.render', word=word)}}">RENDER AS HANDWRITING</a>
+
+{% if rendered %}
+  <img src="{{rendered}}">
+{% endif %}

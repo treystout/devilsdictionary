@@ -1,2 +1,11 @@
 <h1>Welcome to the Devil's Dictionary</h1>
 <p>You can find out more about it here...</p>
+<dl>
+{% for item in words %}
+  <dt>
+    <a href="{{url_for('.definition', word=item[0])}}">{{item.0}}</a>
+    <em>{{item.1}}</em>
+  </dt>
+  <dd>{{item.2}}</dd>
+{% endfor %}
+</dl>
